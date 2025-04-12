@@ -12,7 +12,7 @@ const stats = {
 
 async function start() {
   try {
-    const conn = await amqp.connect('amqp://rabbitmq');
+    const conn = await amqp.connect('amqp://laura:123@rabbitmq');
     const channel = await conn.createChannel();
     
     await channel.assertExchange('analytics_exchange', 'direct', { durable: true });

@@ -8,7 +8,7 @@ class RabbitMQPublisher {
     this.exchangeName = 'analytics_exchange';
     this.queueName = 'analytics_queue';
     this.routingKey = 'analytics';
-    this.rabbitUrl = 'amqp://guest:guest@rabbitmq:5672';
+    this.rabbitUrl = 'amqp://laura:123@rabbitmq:5672';
   }
 
   async connect() {
@@ -94,11 +94,11 @@ app.post('/send-data', async (req, res) => {
     const { clientId, data } = req.body;
     
     if (!clientId || !data) {
-      return res.status(400).json({ error: 'clientId y data son requeridos' });
+      return res.status(400).json({ error: 'Id del cliente y mensaje requeridos' });
     }
 
     await publisher.publish({ clientId, data });
-    res.json({ success: true, message: 'Datos enviados para análisis' });
+    res.json({ success: true, message: 'Datos enviados a la cola' });
     
   } catch (error) {
     res.status(500).json({ 

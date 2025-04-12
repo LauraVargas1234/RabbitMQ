@@ -41,17 +41,14 @@
   <p class="refresh-info">La página se actualizará automáticamente en <span id="countdown">5</span> segundos...</p>
 
   <script>
-    // Función para actualizar los datos
     async function fetchData() {
       try {
         const response = await fetch('/stats');
         const data = await response.json();
         
-        // Actualizar los valores en la página
         document.getElementById('totalMessages').textContent = data.totalMessages;
         document.getElementById('lastUpdated').textContent = data.lastUpdated;
         
-        // Actualizar la tabla de clientes
         const tbody = document.getElementById('clientsBody');
         tbody.innerHTML = Object.entries(data.clients || {})
           .map(([clientId, count]) => `
@@ -65,7 +62,6 @@
       }
     }
 
-    // Contador para la actualización automática
     let seconds = 5;
     function updateCountdown() {
       document.getElementById('countdown').textContent = seconds;
@@ -77,11 +73,9 @@
       }
     }
 
-    // Actualizar cada segundo el contador y cada 5 segundos los datos
     setInterval(updateCountdown, 1000);
     setInterval(fetchData, 5000);
 
-    // Cargar datos iniciales
     fetchData();
   </script>
 </body>
