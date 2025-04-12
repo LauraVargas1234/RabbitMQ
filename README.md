@@ -7,11 +7,11 @@ asegurese de usar la rama master y de tener docker y docker-compose instalado
    
 6. Vaya a la pestaña de "queues and Streams" y verifique que este la cola "analytics_exchange"
 
-7. verifique el funcionamiento de 
-http://localhost:3002/stats -> estadisticas
-http://localhost:3000/ -> panel visual
-http://localhost:15672/-> Vaya a Queues and Streams 
-http://localhost:3001/ -> Mensaje que indica si esta activa la conexion con RabbitMQ
+7. Verifique el funcionamiento de 
+- http://localhost:3002/stats -> estadisticas
+- http://localhost:3000/ -> panel visual
+- http://localhost:15672/-> Vaya a Queues and Streams 
+- http://localhost:3001/ -> Mensaje que indica si esta activa la conexion con RabbitMQ
 
 8. En la consola verifique que este en el proyecto y ejecute:
    curl -X POST http://localhost:3001/send-data \
