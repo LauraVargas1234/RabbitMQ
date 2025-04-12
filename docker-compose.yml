@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  rabbitmq:
+    image: rabbitmq:3-management
+    hostname: rabbitmq
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: guest
+      RABBITMQ_DEFAULT_PASS: guest
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  servicio-cliente:
+    build: ./servicio-cliente
+    ports:
+      - "3001:3001"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+
+  servicio-analiticas:
+    build: ./servicio-analiticas
+    ports:
+      - "3002:3002"
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+    environment:
+      - RABBITMQ_URL=amqp://guest:guest@rabbitmq:5672
+
+  panel-visual:
+    build: ./panel-visual
+    ports:
+      - "3000:3000"
+    depends_on:
+      - servicio-analiticas
+    environment:
+      - ANALYTICS_SERVICE_URL=http://servicio-analiticas:3002
+
+networks:
+  default:
+    driver: bridge

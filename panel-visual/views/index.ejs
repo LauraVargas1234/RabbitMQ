@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title><%= title %></title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 20px; }
+    .stats-card { background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+    th, td { padding: 8px; text-align: left; border-bottom: 1px solid #ddd; }
+    th { background-color: #4CAF50; color: white; }
+    .refresh-info { color: #666; font-size: 0.9em; margin-top: 20px; }
+  </style>
+</head>
+<body>
+  <h1><%= title %></h1>
+  
+  <div class="stats-card">
+    <h2>Estadísticas Globales</h2>
+    <p><strong>Total mensajes:</strong> <span id="totalMessages"><%= stats.totalMessages %></span></p>
+    <p><strong>Última actualización:</strong> <span id="lastUpdated"><%= stats.lastUpdated %></span></p>
+  </div>
+
+  <h2>Datos por Cliente</h2>
+  <table id="clientsTable">
+    <thead>
+      <tr>
+        <th>ID Cliente</th>
+        <th>Mensajes Procesados</th>
+      </tr>
+    </thead>
+    <tbody id="clientsBody">
+      <% clients.forEach(([clientId, count]) => { %>
+        <tr>
+          <td><%= clientId %></td>
+          <td><%= count %></td>
+        </tr>
+      <% }); %>
+    </tbody>
+  </table>
+
+  <p class="refresh-info">La página se actualizará automáticamente en <span id="countdown">5</span> segundos...</p>
+
+  <script>
+    // Función para actualizar los datos
+    async function fetchData() {
+      try {
+        const response = await fetch('/stats');
+        const data = await response.json();
+        
+        // Actualizar los valores en la página
+        document.getElementById('totalMessages').textContent = data.totalMessages;
+        document.getElementById('lastUpdated').textContent = data.lastUpdated;
+        
+        // Actualizar la tabla de clientes
+        const tbody = document.getElementById('clientsBody');
+        tbody.innerHTML = Object.entries(data.clients || {})
+          .map(([clientId, count]) => `
+            <tr>
+              <td>${clientId}</td>
+              <td>${count}</td>
+            </tr>
+          `).join('');
+      } catch (error) {
+        console.error('Error al actualizar datos:', error);
+      }
+    }
+
+    // Contador para la actualización automática
+    let seconds = 5;
+    function updateCountdown() {
+      document.getElementById('countdown').textContent = seconds;
+      seconds--;
+      
+      if (seconds < 0) {
+        seconds = 5;
+        fetchData();
+      }
+    }
+
+    // Actualizar cada segundo el contador y cada 5 segundos los datos
+    setInterval(updateCountdown, 1000);
+    setInterval(fetchData, 5000);
+
+    // Cargar datos iniciales
+    fetchData();
+  </script>
+</body>
+</html>

@@ -1,0 +1,12 @@
+{
+    "name": "servicio-cliente",
+    "version": "1.0.0",
+    "main": "publisher.js",
+    "scripts": {
+      "start": "node publisher.js"
+    },
+    "dependencies": {
+      "amqplib": "^0.10.3",
+      "express": "^4.18.2"
+    }
+  }

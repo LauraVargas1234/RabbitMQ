@@ -1,0 +1,12 @@
+{
+    "name": "servicio-analiticas",
+    "version": "1.0.0",
+    "main": "consumer.js",
+    "scripts": {
+      "start": "node consumer.js"
+    },
+    "dependencies": {
+      "amqplib": "^0.10.3",
+      "express": "^4.18.2"
+    }
+  }
